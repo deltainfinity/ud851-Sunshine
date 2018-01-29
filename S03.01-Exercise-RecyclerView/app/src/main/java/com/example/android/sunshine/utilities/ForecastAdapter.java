@@ -48,7 +48,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     }
 
     public void setWeatherData(String[] weatherData){
-        mWeatherData = weatherData.clone();
+        if(weatherData == null)
+            mWeatherData = weatherData;
+        else
+            mWeatherData = weatherData.clone();
         notifyDataSetChanged();
     }
 
