@@ -16,8 +16,10 @@
 package com.example.android.sunshine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
          * circle. We didn't make the rules (or the names of Views), we just follow them.
          */
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         /* Once all of our views are setup, we can load the weather data. */
         loadWeatherData();
@@ -117,11 +121,11 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
     @Override
     public void onClick(String weatherForDay) {
         Context context = this;
-        // TODO (1) Create a new Activity called DetailActivity using Android Studio's wizard
-        // TODO (2) Change the root layout of activity_detail.xml to a FrameLayout and remove unnecessary xml attributes
-        // TODO (3) Remove the Toast and launch the DetailActivity using an explicit Intent
-        Toast.makeText(context, weatherForDay, Toast.LENGTH_SHORT)
-                .show();
+        // DONE (1) Create a new Activity called DetailActivity using Android Studio's wizard
+        // DONE (2) Change the root layout of activity_detail.xml to a FrameLayout and remove unnecessary xml attributes
+        // DONE (3) Remove the Toast and launch the DetailActivity using an explicit Intent
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
     }
 
     /**
