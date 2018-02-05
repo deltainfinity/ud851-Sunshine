@@ -17,6 +17,7 @@ package com.example.android.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -221,7 +222,14 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
             return true;
         }
 
-        // TODO (2) Launch the map when the map menu item is clicked
+        // DONE (2) Launch the map when the map menu item is clicked
+        if(id == R.id.action_open_map) {
+            Uri uri = Uri.parse("geo:0,0?q=48 E 9400 S Sandy, UT");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            if (intent.resolveActivity(getPackageManager()) != null)
+                startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
