@@ -7,6 +7,6 @@
     <item
         android:id="@+id/action_share"
         android:orderInCategory="1"
-        android:title="Share"
+        android:title="Share Weather Details"
         app:showAsAction="ifRoom"/>
 </menu>
