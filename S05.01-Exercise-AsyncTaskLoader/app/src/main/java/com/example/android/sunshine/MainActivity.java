@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
 
                     String[] simpleJsonWeatherData = OpenWeatherJsonUtils
                             .getSimpleWeatherStringsFromJson(MainActivity.this, jsonWeatherResponse);
-                    mWeatherData = simpleJsonWeatherData.clone();
                     return simpleJsonWeatherData;
 
                 } catch (Exception e) {
@@ -137,13 +136,19 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
 
             @Override
             protected void onStartLoading() {
+                super.onStartLoading();
+                mLoadingIndicator.setVisibility(View.VISIBLE);
                 if(mWeatherData != null){
                     showWeatherDataView();
                     mForecastAdapter.setWeatherData(mWeatherData);
-                    return;
-                }
-                mLoadingIndicator.setVisibility(View.VISIBLE);
-                super.onStartLoading();
+                }else
+                    forceLoad();
+            }
+
+            @Override
+            public void deliverResult(String[] data) {
+                super.deliverResult(data);
+                mWeatherData = data.clone();
             }
         };
     }
@@ -151,9 +156,9 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
     @Override
     public void onLoadFinished(Loader<String[]> loader, String[] strings) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
-        if (mWeatherData != null) {
+        if (strings != null) {
             showWeatherDataView();
-            mForecastAdapter.setWeatherData(mWeatherData);
+            mForecastAdapter.setWeatherData(strings);
         } else {
             showErrorMessage();
         }
@@ -173,11 +178,12 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
         String location = SunshinePreferences.getPreferredWeatherLocation(this);
         Bundle bundle = new Bundle();
         bundle.putString(ZIP_CODE_KEY, location);
-        Loader<String[]> loader = getLoaderManager().getLoader(WEATHER_LOADER);
+        LoaderManager loaderManager = getLoaderManager();
+        Loader<String[]> loader = loaderManager.getLoader(WEATHER_LOADER);
         if(loader == null)
-            getLoaderManager().initLoader(WEATHER_LOADER, bundle, this);
+           loaderManager.initLoader(WEATHER_LOADER, bundle, this);
         else
-            getLoaderManager().restartLoader(WEATHER_LOADER, bundle, this);
+            loaderManager.restartLoader(WEATHER_LOADER, bundle, this);
     }
 
     // DONE (2) Within onCreateLoader, return a new AsyncTaskLoader that looks a lot like the existing FetchWeatherTask.
@@ -272,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
         // DONE (5) Refactor the refresh functionality to work with our AsyncTaskLoader
         if (id == R.id.action_refresh) {
             mForecastAdapter.setWeatherData(null);
+            mWeatherData = null;
             loadWeatherData();
             return true;
         }
