@@ -109,18 +109,20 @@ public class WeatherProvider extends ContentProvider {
         switch(match){
             case CODE_WEATHER:
                 cursor = db.query(WeatherContract.WeatherEntry.TABLE_NAME,
-                        null,
-                        null,
-                        null,
+                        projection,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         sortOrder);
                 break;
             case CODE_WEATHER_WITH_DATE:
+                String date = uri.getLastPathSegment();
+                String[] selectionArguments = new String[]{date};
                 cursor = db.query(WeatherContract.WeatherEntry.TABLE_NAME,
                         projection,
-                        selection,
-                        selectionArgs,
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ",
+                        selectionArguments,
                         null,
                         null,
                         sortOrder);
