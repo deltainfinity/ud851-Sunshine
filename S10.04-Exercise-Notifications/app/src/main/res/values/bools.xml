@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="SHOW_NOTIFICATIONS_BY_DEFAULT">true</bool>
+</resources>
